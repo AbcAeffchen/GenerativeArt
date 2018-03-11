@@ -15,7 +15,7 @@ polynomial get_random_polynomial(const unsigned int degree, std::default_random_
     std::uniform_real_distribution<argument_type> param_dist(-1.0f, 1.0f);
     std::vector<argument_type> poly;
     poly.resize(degree);
-    for(unsigned int i = 0; i < degree; i++)
+    for(unsigned int i = 0; i <= degree; i++)
         poly[i] = param_dist(prng);
 
     return polynomial(poly);
@@ -29,10 +29,10 @@ class random_function
 
     function_type type;
     unsigned int function_index;
-    argument_type opt_val;
+    argument_type opt_val = 0.0;
 
-    random_function* child_function_1 = 0;
-    random_function* child_function_2 = 0;
+    random_function* child_function_1 = nullptr;
+    random_function* child_function_2 = nullptr;
 
 public:
     /**
@@ -64,7 +64,7 @@ public:
         unsigned int r = int_dist(prng);
         unsigned int d = int_dist(prng);
 
-        if(d + depth < 5 || depth == 1)  // todo make the depth a little bit random
+        if(depth == 1)
         {
             if(r < 10)
             {
@@ -98,10 +98,8 @@ public:
 
     ~random_function()
     {
-        if(child_function_1 != 0)
-            delete child_function_1;
-        if(child_function_2 != 0)
-            delete child_function_2;
+        delete child_function_1;
+        delete child_function_2;
     }
 
     argument_type eval(const argument_type x, const argument_type y) const

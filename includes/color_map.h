@@ -15,7 +15,7 @@
 class color_map
 {
 public:
-    virtual void get_color(const argument_type z, uint8_t& r, uint8_t& g, uint8_t& b) const = 0;
+    virtual void get_color(argument_type z, uint8_t& r, uint8_t& g, uint8_t& b) const = 0;
 
 protected:
     /**
@@ -46,8 +46,8 @@ public:
      * @param prng A seeded random number generator. It should be seeded directly before handing it over, so
      * one can have the random function and the colormap generate independently.
      */
-    polynomial_color_map(std::default_random_engine& prng)
-        : degree_dist(std::uniform_int_distribution<unsigned int>(3, 3)),
+    explicit polynomial_color_map(std::default_random_engine& prng)
+        : degree_dist(std::uniform_int_distribution<unsigned int>(1, 3)),
           r_poly(get_random_polynomial(polynomial_color_map::degree_dist(prng), prng)),
           g_poly(get_random_polynomial(polynomial_color_map::degree_dist(prng), prng)),
           b_poly(get_random_polynomial(polynomial_color_map::degree_dist(prng), prng))

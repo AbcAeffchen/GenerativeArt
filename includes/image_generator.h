@@ -31,10 +31,11 @@ public:
 #pragma omp parallel for
         for(png::uint_32 y = 0; y < image.get_height(); y++)
         {
+            auto tmp = (static_cast<argument_type>(y) + static_cast<argument_type>(y_offset)) / static_cast<argument_type>(resolution);
             for(png::uint_32 x = 0; x < image.get_width(); x++)
             {
                 argument_type z = rf.eval((static_cast<argument_type>(x) + static_cast<argument_type>(x_offset)) / static_cast<argument_type>(resolution),
-                                   (static_cast<argument_type>(y) + static_cast<argument_type>(y_offset)) / static_cast<argument_type>(resolution));
+                                   tmp);
                 uint8_t r, g, b;
                 cm.get_color(z, r, g, b);
 

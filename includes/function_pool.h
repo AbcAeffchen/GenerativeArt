@@ -5,6 +5,7 @@
 #ifndef GENERATIVEART_FUNCTION_POOL_H
 #define GENERATIVEART_FUNCTION_POOL_H
 
+#include <utility>
 #include <vector>
 #include <functional>
 #include <iostream>
@@ -17,8 +18,8 @@ class polynomial
     const std::vector<argument_type> poly;
 
 public:
-    polynomial(std::vector<argument_type> poly)
-        : poly(poly)
+    explicit polynomial(std::vector<argument_type> poly)
+        : poly(std::move(poly))
     {}
 
     /**
@@ -46,7 +47,7 @@ struct function_pool
     using unary_function = std::function<argument_type(const argument_type)>;
     using binary_function = std::function<argument_type(const argument_type, const argument_type)>;
 
-    const std::vector<unary_function> unary_pool{sinf, cosf, expf, logf, sinhf, coshf, tanhf, fabsf,
+    const std::vector<unary_function> unary_pool{sinf, cosf, expf, logf, sinhf, coshf, tanhf, fabsf, sqrt,
                                                  [](const argument_type a){ return -a; },
                                                  [](const argument_type a){ return a*a; },
                                                  [](const argument_type a){ return a*a*a; }
@@ -55,7 +56,8 @@ struct function_pool
 
     const std::vector<binary_function> binary_pool{[](const argument_type a, const argument_type b){ return (a + b) / 2.0; },
                                                    [](const argument_type a, const argument_type b){ return a - b; },
-                                                   [](const argument_type a, const argument_type b){ return a * b; }
+                                                   [](const argument_type a, const argument_type b){ return a * b; },
+                                                   [](const argument_type a, const argument_type b){ return sin(a * b); }
                                                    // add more functions here
     };
 
