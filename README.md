@@ -3,6 +3,12 @@
 This is a just for fun project aiming to generate some nice images.
 
 <!-- todo add examples here -->
+![Example A](/examples/A.png)
+![Example B](/examples/B.png)
+![Example C](/examples/C.png)
+![Example D](/examples/D.png)
+![Example E](/examples/E.png)
+![Example F](/examples/F.png)
 
 ## Compiling
 ```bash
