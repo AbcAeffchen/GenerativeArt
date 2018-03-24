@@ -140,7 +140,7 @@ public:
             const size_t num_options = 17;
             std::vector<std::string> settings(num_options);
 
-            const auto end_of_file_name = file_name.find(".png");
+            const auto end_of_file_name = file_name.find("png");
 
             for(size_t i = 0, last = 0, next = 0; i < num_options; i++)
             {
