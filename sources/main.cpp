@@ -195,6 +195,7 @@ int main(int argc, char** argv)
 
     for(unsigned int i = 0; i < settings.num_samples; /* i is set by the generator */)
     {
+        verbose(settings.verbose, "------------------------------------------------------------");
         if(ga.generate())
         {
             i++;

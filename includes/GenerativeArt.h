@@ -242,6 +242,9 @@ public:
         unsigned int function_seed = settings.random_function_seed ? settings.random_function_seed : rd();
         unsigned int color_seed = settings.color_map_seed ? settings.color_map_seed : rd();
 
+        verbose(settings.verbose, "Function Seed: " + std::to_string(function_seed));
+        verbose(settings.verbose, "Color Seed:    " + std::to_string(color_seed));
+
         // draw the random function
         std::default_random_engine function_prng(function_seed);
         std::uniform_int_distribution<unsigned int> depth_dist(settings.function_depth.min,
@@ -263,9 +266,10 @@ public:
         // prepare for generation
         const auto dim_x = static_cast<uint32_t>((settings.x.max - settings.x.min) * settings.resolution);
         const auto dim_y = static_cast<uint32_t>((settings.y.max - settings.y.min) * settings.resolution);
+        const auto num_pixels = dim_x * dim_y;
         const auto step_size = 1.f / static_cast<argument_type>(settings.resolution);
 
-        std::vector<argument_type> values(dim_x * dim_y);
+        std::vector<argument_type> values(num_pixels);
 
 #pragma omp parallel for
         for(uint32_t y_px = 0; y_px < dim_y; y_px++)
@@ -278,7 +282,7 @@ public:
             }
         }
 
-        std::vector<uint8_t> colors(dim_x * dim_y * 3);
+        std::vector<uint8_t> colors(num_pixels * 3);
 
         const auto normalize = settings.normalize;
 
@@ -290,7 +294,7 @@ public:
         uint32_t white = 0,
                  black = 0;
 
-#pragma omp parallel for reduction(+:acc_r,acc_g,acc_b) reduction(min:min_r,min_g,min_b,white,black) reduction(max:max_r,max_g,max_b)
+#pragma omp parallel for reduction(+:acc_r,acc_g,acc_b,white,black) reduction(min:min_r,min_g,min_b) reduction(max:max_r,max_g,max_b)
         for(uint32_t y_px = 0; y_px < dim_y; y_px++)
         {
             for(uint32_t x_px = 0; x_px < dim_x; x_px++)
@@ -319,13 +323,16 @@ public:
             }
         }
 
-        double mean_r = static_cast<double>(acc_r) / (dim_x * dim_y);
-        double mean_g = static_cast<double>(acc_g) / (dim_x * dim_y);
-        double mean_b = static_cast<double>(acc_b) / (dim_x * dim_y);
+        verbose(settings.verbose, "white pixels: " + std::to_string(static_cast<double>(white) / num_pixels));
+        verbose(settings.verbose, "black pixels: " + std::to_string(static_cast<double>(black) / num_pixels));
+
+        double mean_r = static_cast<double>(acc_r) / num_pixels;
+        double mean_g = static_cast<double>(acc_g) / num_pixels;
+        double mean_b = static_cast<double>(acc_b) / num_pixels;
 
         // find single color images
         if((max_r - min_r < 5 && max_g - min_g < 5 && max_b - min_b < 5)
-            || white > dim_x * dim_y * 0.9 || black > dim_x * dim_y * 0.9)
+            || white > num_pixels * 0.9 || black > num_pixels * 0.9)
         {
             verbose(settings.verbose, "Single color image -> trying again");
             return false;
@@ -350,7 +357,7 @@ public:
                 "var:  " + std::to_string(var_r) + ", " + std::to_string(var_g) + ", " + std::to_string(var_b));
 
 #pragma omp parallel for
-            for (size_t i = 0; i < dim_x * dim_y; i++)
+            for (size_t i = 0; i < num_pixels; i++)
             {
                 if(var_r < 0.001)
                     colors[i * 3 + 0] = static_cast<uint8_t>((static_cast<double>(colors[i * 3 + 0]) - mean_r) / (var_r / 3));
