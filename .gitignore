@@ -1,5 +1,7 @@
 # CLion
 /.idea
+/cmake-build-debug
+/build
 
 # Created by .ignore support plugin (hsz.mobi)
 ### C template
