@@ -117,7 +117,7 @@ public:
 
         // color map settings
         Domain<unsigned int> color_poly_deg = {2, 3};
-        Domain<argument_type> color_poly_param = {-128.f, 128.f};
+        Domain<argument_type> color_poly_param = {-96.f, 96.f};
 
         ColorMap::projection_type pt = ColorMap::projection_type::cap;
 
@@ -150,7 +150,7 @@ public:
                     // the last item and ".png" is not part of the file name
                     if(i == num_options - 1 && end_of_file_name == std::string::npos)
                     {
-                        file_name.substr(last); // use the rest of the file name for the last option
+                        settings[i] = file_name.substr(last); // use the rest of the file name for the last option
                         break;
                     }
                     // else either more than one option is missing or the file extension is included.
@@ -332,7 +332,7 @@ public:
 
         // find single color images
         if((max_r - min_r < 5 && max_g - min_g < 5 && max_b - min_b < 5)
-            || white > num_pixels * 0.9 || black > num_pixels * 0.9)
+            || white > num_pixels * 0.85 || black > num_pixels * 0.85)
         {
             verbose(settings.verbose, "Single color image -> trying again");
             return false;

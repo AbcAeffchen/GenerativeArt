@@ -136,8 +136,8 @@ int read_settings(GenerativeArt::Settings& settings, int argc, char**& argv)
 
     if(app.count("--file-name") > 0)
     {
-        settings.read_file_name(file_name, app.count("--projection-type") > 0,
-                                app.count("-x") > 0, app.count("-y") > 0);
+        settings.read_file_name(file_name, app.count("--projection-type") <= 0,
+                                app.count("-x") <= 0, app.count("-y") <= 0);
     }
 
     // if both seeds are set only one image is generated
