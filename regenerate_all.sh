@@ -12,4 +12,4 @@ if [ ! -d $1/$2 ]; then
     mkdir $1/$2
 fi
 
-(ls -1 $1 | grep .png) | xargs -i ./build/GenerativeArt -o $1/$2/ -f {} -r $2
+(ls -1 $1 | grep .png) | xargs -i ./build/GenerativeArt -o $1/$2/ --color-permutations -r $2 -f {}
