@@ -132,7 +132,14 @@ int read_settings(GenerativeArt::Settings& settings, int argc, char**& argv)
         ->group("Image Options")
         ->set_type_name("{Cap=0, Periodic=1, Smooth Periodic=2}");
 
-    CLI11_PARSE(app, argc, argv);
+    try
+    {
+        app.parse(argc, argv);
+    }
+    catch(const CLI::ParseError &e)
+    {
+        exit(app.exit(e));
+    }
 
     if(app.count("--file-name") > 0)
     {
