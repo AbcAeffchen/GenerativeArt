@@ -13,12 +13,35 @@ const std::vector<FunctionPool::unary_function> FunctionPool::unary = {
     // add more functions here, else older images cannot be reproduced
 };
 
+const std::vector<FunctionPool::unary_function_discription> FunctionPool::unary_string = {
+    {"sin(", ")"},
+    {"cos(", ")"},
+    {"exp(", ")"},
+    {"log(", ")"},
+    {"sinh(", ")"},
+    {"cosh(", ")"},
+    {"tanh(", ")"},
+    {"|", "|"},
+    {"sqrt(", ")"},
+    {"", ""},
+    {"-", ""},
+    {"(", ")^2"},
+    {"(", ")^3"}
+};
+
 const std::vector<FunctionPool::binary_function> FunctionPool::binary = {
     [](const argument_type a, const argument_type b){ return a + b; },
     [](const argument_type a, const argument_type b){ return a - b; },
     [](const argument_type a, const argument_type b){ return a * b; },
     [](const argument_type a, const argument_type b){ return sin(a * b); }
     // add more functions here, else older images cannot be reproduced
+};
+
+const std::vector<FunctionPool::binary_function_discription> FunctionPool::binary_string = {
+    std::make_tuple("(", " + ", ")"),
+    std::make_tuple("(", " - ", ")"),
+    std::make_tuple("(", " * ", ")"),
+    std::make_tuple("sin(", " * ", ")")
 };
 
 

@@ -41,16 +41,16 @@ constexpr uint32_t close_to_white(uint8_t r, uint8_t g, uint8_t b)
     return static_cast<uint32_t>(r > 245 && g > 245 && b > 245);
 }
 
+constexpr uint32_t close_to_black(uint8_t r, uint8_t g, uint8_t b)
+{
+    return static_cast<uint32_t>(r < 10 && g < 10 && b < 10);
+}
+
 constexpr uint32_t colors_to_int(uint8_t r, uint8_t g, uint8_t b)
 {
     return static_cast<uint32_t>(r) << 16
            | static_cast<uint32_t>(g) << 8
            | static_cast<uint32_t>(b);
-}
-
-constexpr uint32_t close_to_black(uint8_t r, uint8_t g, uint8_t b)
-{
-    return static_cast<uint32_t>(r < 10 && g < 10 && b < 10);
 }
 
 constexpr float accuracy = 100.f;
@@ -191,6 +191,7 @@ public:
                     static_cast<argument_type>(stoi(settings[13])) / accuracy,
                     static_cast<argument_type>(stoi(settings[14])) / accuracy
                 };
+
             if(include_y)
                 y = {
                     static_cast<argument_type>(stoi(settings[15])) / accuracy,
@@ -255,6 +256,9 @@ public:
                                 settings.unary_function_pool_size,
                                 settings.binary_function_pool_size);
 
+        verbose(settings.verbose, "Function:\nf = " + rf.print());
+        verbose(settings.verbose, "depth: " + std::to_string(rf.get_depth()));
+
         // draw the color map
         std::default_random_engine color_prng(color_seed);
 
@@ -262,6 +266,8 @@ public:
                                     settings.pt,
                                     settings.color_poly_deg,
                                     settings.color_poly_param);
+
+        verbose(settings.verbose, "Color:\n" + cm.print());
 
         // prepare for generation
         const auto dim_x = static_cast<uint32_t>((settings.x.max - settings.x.min) * settings.resolution);

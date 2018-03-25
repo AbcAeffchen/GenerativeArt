@@ -76,6 +76,13 @@ public:
         g = get_color_byte(g_poly.eval(z));
         b = get_color_byte(b_poly.eval(z));
     }
+
+    std::string print() const
+    {
+        return "r = " + r_poly.print() + "\n"
+             + "g = " + g_poly.print() + "\n"
+             + "b = " + b_poly.print();
+    }
 };
 
 

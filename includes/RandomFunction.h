@@ -72,11 +72,25 @@ public:
 
         return result;
     }
+
+    std::string print() const
+    {
+        std::string description = std::to_string(poly[0]);
+
+        for(unsigned int i = 1; i < poly.size(); i++)
+        {
+            description += " x^" + std::to_string(poly.size() - i) + " + " + std::to_string(poly[i]);
+        }
+
+        return description;
+    }
 };
 
 class RandomFunction
 {
     enum function_type {unary, binary, terminal_index};
+
+    const unsigned int depth;
 
     function_type type;
     unsigned int function_index;
@@ -100,6 +114,7 @@ public:
                    const Domain<float>& param_domain,
                    const size_t num_unary_functions = FunctionPool::unary.size(),
                    const size_t num_binary_functions = FunctionPool::binary.size())
+        : depth(depth)
     {
         assert(depth > 0);
 
@@ -150,6 +165,30 @@ public:
                                                                      child_function_2->eval(x, y));
             default: return param * (function_index ? x : y);
         }
+    }
+
+    std::string print() const
+    {
+        std::string description = std::to_string(param) + " * ";
+        switch(type)
+        {
+            case unary: return description
+                    + FunctionPool::unary_string[function_index].first
+                    + child_function_1->print()
+                    + FunctionPool::unary_string[function_index].second;
+            case binary: return description
+                    + std::get<0>(FunctionPool::binary_string[function_index])
+                    + child_function_1->print()
+                    + std::get<1>(FunctionPool::binary_string[function_index])
+                    + child_function_2->print()
+                    + std::get<2>(FunctionPool::binary_string[function_index]);
+            default: return description + (function_index ? "x" : "y");
+        }
+    }
+
+    unsigned int get_depth() const
+    {
+        return depth;
     }
 };
 
