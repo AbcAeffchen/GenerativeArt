@@ -38,12 +38,12 @@ constexpr uint32_t pos_to_index(uint32_t x, uint32_t y, uint32_t max_x, uint32_t
 
 constexpr uint32_t close_to_white(uint8_t r, uint8_t g, uint8_t b)
 {
-    return static_cast<uint32_t>(r > 245 && g > 245 && b > 245);
+    return static_cast<uint32_t>(r > 240 && g > 240 && b > 240);
 }
 
 constexpr uint32_t close_to_black(uint8_t r, uint8_t g, uint8_t b)
 {
-    return static_cast<uint32_t>(r < 10 && g < 10 && b < 10);
+    return static_cast<uint32_t>(r < 15 && g < 15 && b < 15);
 }
 
 constexpr uint32_t colors_to_int(uint8_t r, uint8_t g, uint8_t b)
@@ -112,8 +112,8 @@ public:
         // ------------------------------------------------------
 
         // depth of the random function
-        Domain<unsigned int> function_depth = {4, 10};
-        Domain<argument_type> function_param = {1.f, 2.f};
+        Domain<unsigned int> function_depth = {4, 7};
+        Domain<argument_type> function_param = {1.f, 1.9f};
 
         // color map settings
         Domain<unsigned int> color_poly_deg = {2, 3};
