@@ -41,6 +41,11 @@ int read_settings(GenerativeArt::Settings& settings, int argc, char**& argv)
     app.add_flag("--color-permutations", settings.generate_all_color_permutations,
                  "Stores six color permutations of each image.")
         ->group("Program Options");
+    bool no_scale = false;
+    app.add_flag("--no-scale", no_scale,
+                 "Scaling adjusts the resolution, such that the resulting image's shortest edge has at least"
+                 "the number of pixels set as resolution.")
+        ->group("Program Options");
     app.add_flag("-v,--verbose", settings.verbose, "Shows details about what the program is doing.")
         ->group("Program Options");
     std::string new_ini_file;
@@ -159,6 +164,16 @@ int read_settings(GenerativeArt::Settings& settings, int argc, char**& argv)
         {
             settings.resolution = 4000;
             verbose(settings.verbose, "The seed was set without a resolution. The resolution was set to 4000px.");
+        }
+    }
+
+    if(!no_scale)
+    {
+        float min_edge_length = std::fmin(settings.x.max - settings.x.min, settings.y.max - settings.y.min);
+        if(min_edge_length < 1)
+        {
+            settings.resolution = static_cast<unsigned int>(settings.resolution / min_edge_length + 1);
+            verbose(settings.verbose, "Adjusted resolution to " + std::to_string(settings.resolution) + "px");
         }
     }
 
