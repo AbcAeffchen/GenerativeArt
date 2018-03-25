@@ -38,6 +38,9 @@ int read_settings(GenerativeArt::Settings& settings, int argc, char**& argv)
     // Program Options
     app.add_option("-s,--num-samples", settings.num_samples, "The number of samples generated.", true)
         ->group("Program Options");
+    app.add_flag("--color-permutations", settings.generate_all_color_permutations,
+                 "Stores six color permutations of each image.")
+        ->group("Program Options");
     app.add_flag("-v,--verbose", settings.verbose, "Shows details about what the program is doing.")
         ->group("Program Options");
     std::string new_ini_file;

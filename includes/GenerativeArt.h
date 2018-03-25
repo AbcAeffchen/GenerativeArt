@@ -98,9 +98,7 @@ public:
 
         std::string directory = "images/";
 
-        // ------------------------------------------------------
-        // Settings unrelated to the image
-        // ------------------------------------------------------
+        bool generate_all_color_permutations = false;
 
         unsigned int num_samples = 100;
 
@@ -375,6 +373,19 @@ public:
         }
 
         // calculate the image from the color values.
+        if(settings.generate_all_color_permutations)
+            store_image_color_permutaions(dim_x, dim_y, function_seed, color_seed, colors);
+        else
+            store_image(dim_x, dim_y, function_seed, color_seed, colors);
+
+        return true;
+    }
+
+private:
+    void store_image(const uint32_t dim_x, const uint32_t dim_y,
+                     const unsigned int function_seed, const unsigned int color_seed,
+                     const std::vector<uint8_t>& colors) const
+    {
         png::image<png::rgb_pixel> image(dim_x, dim_y);
 
 #pragma omp parallel for
@@ -388,8 +399,40 @@ public:
         }
 
         image.write(settings.directory + settings.get_file_name(function_seed, color_seed) + ".png");
+    }
 
-        return true;
+    void store_image_color_permutaions(const uint32_t dim_x, const uint32_t dim_y,
+                                       const unsigned int function_seed, const unsigned int color_seed,
+                                       const std::vector<uint8_t>& colors) const
+    {
+        png::image<png::rgb_pixel> image1(dim_x, dim_y);
+        png::image<png::rgb_pixel> image2(dim_x, dim_y);
+        png::image<png::rgb_pixel> image3(dim_x, dim_y);
+        png::image<png::rgb_pixel> image4(dim_x, dim_y);
+        png::image<png::rgb_pixel> image5(dim_x, dim_y);
+        png::image<png::rgb_pixel> image6(dim_x, dim_y);
+
+#pragma omp parallel for
+        for(png::uint_32 y_px = 0; y_px < image1.get_height(); y_px++)
+        {
+            for(png::uint_32 x_px = 0; x_px < image1.get_width(); x_px++)
+            {
+                const auto i = 3 * pos_to_index(static_cast<uint32_t>(x_px), static_cast<uint32_t>(y_px), dim_x, dim_y);
+                image1[y_px][x_px] = png::rgb_pixel(colors[i], colors[i + 1], colors[i + 2]);
+                image2[y_px][x_px] = png::rgb_pixel(colors[i], colors[i + 2], colors[i + 1]);
+                image3[y_px][x_px] = png::rgb_pixel(colors[i + 1], colors[i + 0], colors[i + 2]);
+                image4[y_px][x_px] = png::rgb_pixel(colors[i + 1], colors[i + 2], colors[i + 0]);
+                image5[y_px][x_px] = png::rgb_pixel(colors[i + 2], colors[i + 1], colors[i + 0]);
+                image6[y_px][x_px] = png::rgb_pixel(colors[i + 2], colors[i + 0], colors[i + 1]);
+            }
+        }
+
+        image1.write(settings.directory + settings.get_file_name(function_seed, color_seed) + ".1.png");
+        image2.write(settings.directory + settings.get_file_name(function_seed, color_seed) + ".2.png");
+        image3.write(settings.directory + settings.get_file_name(function_seed, color_seed) + ".3.png");
+        image4.write(settings.directory + settings.get_file_name(function_seed, color_seed) + ".4.png");
+        image5.write(settings.directory + settings.get_file_name(function_seed, color_seed) + ".5.png");
+        image6.write(settings.directory + settings.get_file_name(function_seed, color_seed) + ".6.png");
     }
 };
 
