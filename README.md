@@ -110,5 +110,9 @@ png files.
 Therefore libpng and libzip needs to be installed.
 - OpenMP is used to generate an image in parallel.
 
+## You Like the Project?
+Have a look a my [printed art](https://www.redbubble.com/people/abcaeffchen)
+or my [amazon list](https://www.amazon.de/gp/registry/wishlist/3HVLST6MM4MNH/).
+
 ## Licence
 GPL v3.0
