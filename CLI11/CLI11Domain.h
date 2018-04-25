@@ -44,9 +44,8 @@ CLI::Option* add_domain(CLI::App& app,
     };
 
     CLI::Option* opt = app.add_option(std::move(name), reader, std::move(description), defaulted);
-    opt->set_custom_option(TypeName<T>() + "=" + std::to_string(static_cast<int>(variable.min))
-                           + " " +
-                           TypeName<T>() + "=" + std::to_string(static_cast<int>(variable.max)), 2, true);
+    opt->set_custom_option(TypeName<T>() + " " + TypeName<T>(), 2);
+
     if(defaulted)
     {
         std::stringstream out;

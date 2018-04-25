@@ -24,56 +24,50 @@ cmake --build . --target GenerativeArt -j
 ```text
 Usage: GenerativeArt [OPTIONS]
 
-Image Options:
-  -r,--resolution UINT=200  The resolution the image(s) are generated in.
-  -x,--x-domain FLOAT=0 FLOAT=1
-                            Min and max values of the domain of the x dimension.
-  -y,--y-domain FLOAT=0 FLOAT=1
-                            Min and max values of the domain of the y dimension.
-  -n,--no-normalization     Stops normalizing the color transitions, that reduces the flickering.
-  --projection-type {Cap=0, Periodic=1, Smooth Periodic=2}=0
-                            The way the values of the color polynomials get projected into the
-                            [0,255] range.
-                            - Cap: x -> 255 for x > 255, x -> 0 for x < 0, x -> x else.
-                            - Periodic: x -> x mod 256
-                            - Smooth Periodic: x -> x mod 2 -> 255 * x^2 * (x-2)^2
-
 Options:
-  -h,--help                 Print this help message and exit
+  -h,--help                   Print this help message and exit
 
 Program Options:
-  -s,--num-samples UINT=100 The number of samples generated.
-  -v,--verbose              Shows details about what the program is doing.
-  -w,--write-ini TEXT       Writes the current settings into the given ini file.
-  --config TEXT             Read an ini file
-  -o,--out TEXT=images/     The directory where the images are stored.
+  -s,--num-samples UINT=100   The number of samples generated.
+  --color-permutations        Stores six color permutations of each image.
+  --no-scale                  Scaling adjusts the resolution, such that the resulting image's shortest edge has at leastthe number of pixels set as resolution.
+  -v,--verbose                Shows details about what the program is doing.
+  -w,--write-ini TEXT         Writes the current settings into the given ini file.
+  --config TEXT               Read an ini file
+  -o,--out TEXT=images/       The directory where the images are stored.
 
 Randomness Options:
-  -f,--file-name TEXT Excludes: -D,--function-depth -P,--function-params -d,--color-poly-deg
-                                -p,--color-poly-params -F,--function-seed -C,--color-seed
-                                --num_unary_functions --num_binary_functions
-                            The file name of a sample image. This can be used to
-                            regenerate the image on a higher resolution. If used you
-                            cannot use any of the randomness options.
-  -D,--function-depth UINT=4 UINT=10 Excludes: -f,--file-name
-                            The domain the depth of the random function is drawn from.
-  -P,--function-params FLOAT=-16 FLOAT=16 Excludes: -f,--file-name
-                            The domain the parameters of the random function is drawn from.
-  -d,--color-poly-deg UINT=2 UINT=3 Excludes: -f,--file-name
-                            The domain the degree of the random color polynomials is drawn from.
-  -p,--color-poly-params FLOAT=-128 FLOAT=128 Excludes: -f,--file-name
-                            The domain the parameters of the random color polynomials is drawn from.
-  -F,--function-seed UINT Excludes: -f,--file-name
-                            The seed for the random function. If provided only one image is generated.
-  -C,--color-seed UINT Excludes: -f,--file-name
-                            The seed for the color functions. If provided only one image is generated.
-  --num_unary_functions UINT=13 Excludes: -f,--file-name
-                            Number of unary functions available. This is just to support more
-                            functions without breaking generation of old images.
-  --num_binary_functions UINT=4 Excludes: -f,--file-name
-                            Number of binary functions available. This is just to support more
-                            functions without breaking generation of old images.
+  -f,--file-name TEXT Excludes: --function-depth --function-params --color-poly-deg --color-poly-params --function-seed --color-seed --num_unary_functions --num_binary_functions
+                              The file name of a sample image. This can be used to regenerate the image on a higher resolution. If used you cannot use any of the randomness options.
+  -D,--function-depth UINT UINT=4 7 Excludes: --file-name
+                              The domain the depth of the random function is drawn from.
+  -P,--function-params FLOAT FLOAT=1 1.9 Excludes: --file-name
+                              The domain the parameters of the random function is drawn from.
+  -d,--color-poly-deg UINT UINT=2 3 Excludes: --file-name
+                              The domain the degree of the random color polynomials is drawn from.
+  -p,--color-poly-params FLOAT FLOAT=-96 96 Excludes: --file-name
+                              The domain the parameters of the random color polynomials is drawn from.
+  -F,--function-seed UINT Excludes: --file-name
+                              The seed for the random function. If provided only one image is generated.
+  -C,--color-seed UINT Excludes: --file-name
+                              The seed for the color functions. If provided only one image is generated.
+  --num_unary_functions UINT=13 Excludes: --file-name
+                              Number of unary functions available. This is just to support more functions without breaking generation of old images.
+  --num_binary_functions UINT=4 Excludes: --file-name
+                              Number of binary functions available. This is just to support more functions without breaking generation of old images.
 
+Image Options:
+  -r,--resolution UINT=200    The resolution the image(s) are generated in.
+  -x,--x-domain FLOAT FLOAT=0 1
+                              Min and max values of the domain of the x dimension.
+  -y,--y-domain FLOAT FLOAT=0 1
+                              Min and max values of the domain of the y dimension.
+  -n,--no-normalization       Stops normalizing the color transitions, that reduces the flickering.
+  --projection-type {Cap=0, Periodic=1, Smooth Periodic=2}=0
+                              The way the values of the color polynomials get projected into the [0,255] range.
+                              - Cap: x -> 255 for x > 255, x -> 0 for x < 0, x -> x else.
+                              - Periodic: x -> x mod 256
+                              - Smooth Periodic: x -> x mod 2 -> 255 * x^2 * (x-2)^2
 ```
 
 ## Development Notices

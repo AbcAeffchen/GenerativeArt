@@ -129,9 +129,10 @@ int read_settings(GenerativeArt::Settings& settings, int argc, char**& argv)
                  "Stops normalizing the color transitions, that reduces the flickering.")
         ->configurable(true)
         ->group("Image Options");
-    app.add_set("--projection-type", settings.pt, {ColorMap::projection_type::cap,
-                                                   ColorMap::projection_type::periodic,
-                                                   ColorMap::projection_type::smooth_periodic},
+    unsigned int pt_tmp = ColorMap::projection_type::cap;
+    app.add_set("--projection-type", pt_tmp, {ColorMap::projection_type::cap,
+                                              ColorMap::projection_type::periodic,
+                                              ColorMap::projection_type::smooth_periodic},
                 "The way the values of the color polynomials get projected into the [0,255] range.\n"
                 + std::string(wid, space) + "- Cap: x -> 255 for x > 255, x -> 0 for x < 0, x -> x else.\n"
                 + std::string(wid, space) + "- Periodic: x -> x mod 256\n"
@@ -148,6 +149,8 @@ int read_settings(GenerativeArt::Settings& settings, int argc, char**& argv)
     {
         exit(app.exit(e));
     }
+
+    settings.pt = static_cast<ColorMap::projection_type>(pt_tmp);
 
     if(app.count("--file-name") > 0)
     {
